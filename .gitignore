@@ -1,0 +1,8 @@
+# Секреты (токены GitHub и Telegram) — никогда не коммитим
+.env
+*.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
