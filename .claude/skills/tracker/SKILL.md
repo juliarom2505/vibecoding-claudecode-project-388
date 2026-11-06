@@ -97,8 +97,9 @@ stdout — готовый JSON прогона (формат ниже), stderr �
 
 ## Сохранение прогона
 
-Прогоны хранятся отдельно от кода — в приватном репозитории **`juliarom2505/tracker-data`**,
-ветка `main`. Пишем **через GitHub MCP**, без `git clone` / `git push`: каждая запись
+Прогоны хранятся отдельно от кода — в приватном репозитории **`<owner>/tracker-data`**,
+ветка `main`, где `<owner>` — логин текущего аккаунта GitHub: узнай его через GitHub MCP
+`get_me` (поле `login`) один раз в начале прогона. Пишем **через GitHub MCP**, без `git clone` / `git push`: каждая запись
 файла — это сразу отдельный коммит.
 
 **Схема хранения:** один прогон — один файл `YYYY-MM-DD.json` в корне репозитория,
@@ -108,12 +109,12 @@ stdout — готовый JSON прогона (формат ниже), stderr �
 **Как записать:**
 
 1. Проверь, есть ли уже файл за эту дату: `get_file_contents`
-   (`owner: juliarom2505`, `repo: tracker-data`, `path: YYYY-MM-DD.json`, `ref: refs/heads/main`).
+   (`owner: <owner>`, `repo: tracker-data`, `path: YYYY-MM-DD.json`, `ref: refs/heads/main`).
    - Файла нет → создаем.
    - Файл есть (повторный прогон в тот же день) → запомни его `sha`: новый прогон
      **перезапишет** файл, а прошлая версия останется в истории коммитов.
 2. Запиши файл: `create_or_update_file`
-   - `owner: juliarom2505`, `repo: tracker-data`, `branch: main`, `path: YYYY-MM-DD.json`;
+   - `owner: <owner>`, `repo: tracker-data`, `branch: main`, `path: YYYY-MM-DD.json`;
    - `content` — JSON прогона как есть (обычный текст, **не** base64);
    - `sha` — только если файл уже был;
    - `message` — `Run YYYY-MM-DD: N items, ok X, no_price Y, unavailable Z`.
@@ -127,7 +128,7 @@ stdout — готовый JSON прогона (формат ниже), stderr �
 ## Сравнение с прошлым прогоном
 
 **1. Найти прошлый прогон** — через GitHub MCP, до записи нового:
-- `get_file_contents` (`owner: juliarom2505`, `repo: tracker-data`, `path: /`) → список файлов;
+- `get_file_contents` (`owner: <owner>`, `repo: tracker-data`, `path: /`) → список файлов;
 - оставь файлы вида `YYYY-MM-DD.json` и возьми **последний по дате** (сортировка по имени).
   Если есть файл за сегодня (повторный запуск) — он и есть прошлый прогон;
 - прочитай его `get_file_contents` и сохрани содержимое во временный файл, например `/tmp/prev.json`;
